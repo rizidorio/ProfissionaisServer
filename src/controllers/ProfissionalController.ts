@@ -5,6 +5,7 @@ import db from '../database/connection';
 
 export default class ProfissionalController {
     async index(res: Response, req: Request) {
+
         const { cidade, categoria, subcategorias } = req.query;
         
         const parsedSubcategorias = String(subcategorias).split(',').map(sub => Number(sub.trim()));
@@ -21,6 +22,7 @@ export default class ProfissionalController {
     }
 
     async create(res: Response, req: Request) {
+        console.log(req.body);
         const {
             nome,
             cpf,
@@ -36,6 +38,8 @@ export default class ProfissionalController {
             subcategorias
         } = req.body;
 
+
+
         const trx = await db.transaction();
 
         const profissional = {
@@ -48,7 +52,29 @@ export default class ProfissionalController {
             celular,
             whatsapp,
             email,
-            facebook
-        }
+            facebook,
+            categoria
+        };
+
+        const idsInseridos = await trx('profissionais').insert(profissional);
+
+        const profissional_id = idsInseridos[0];
+
+        const subcats = subcategorias.split(',')
+                                     .map((sub: string) => Number(sub.trim()))
+                                     .map((subcategoria_id: number) => {
+                                        return {
+                                            subcategoria_id,
+                                            profissional_id
+                                        };
+                                     });
+        await trx('prof_cat_subcat').insert(subcats);
+
+        trx.commit();
+
+        return res.json({
+            id: profissional_id,
+            ...profissional
+        });
     }
 }
