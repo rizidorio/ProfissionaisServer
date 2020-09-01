@@ -3,15 +3,19 @@ import { celebrate, Joi } from 'celebrate';
 
 import ProfissionaisController from './controllers/ProfissionaisController';
 import CategoriasController from './controllers/CategoriasController';
+import SubcategoriasController from './controllers/SubcategoriasController';
 
 const routes = express.Router();
 
 const profissionaisController = new ProfissionaisController();
 const categoriasController = new CategoriasController();
+const subcategoriasController = new SubcategoriasController();
 
+routes.get('/categorias', categoriasController.index);
+routes.get('/subcategorias', subcategoriasController.index);
 routes.get('/profissionais', profissionaisController.index);
 routes.get('/profissionais/:id', profissionaisController.exibirPorId);
-routes.get('/categorias', categoriasController.index);
+
 
 routes.post('/profissionais',
     celebrate({
