@@ -5,9 +5,9 @@ import db from '../database/connection';
 export default class ProfissionaisController {
     async index(req: Request, res: Response) {
         try {
-            const { cidade, categoria, subcategorias } = req.query;
+            const { cidade, categoria, subcategoria } = req.query;
 
-            const parsedSubcategorias = String(subcategorias).split(',').map(subcategoria => Number(subcategoria.trim()));
+            const parsedSubcategorias = String(subcategoria).split(',').map(subcategoria => Number(subcategoria.trim()));
 
             if(!cidade || !categoria){
                 return res.status(400).json({
@@ -16,7 +16,7 @@ export default class ProfissionaisController {
             }
             let profissionais = [];
 
-            if(!subcategorias){
+            if(!subcategoria){
                 profissionais = await db('profissionais')
                 .join('prof_cat_subcat', 'profissionais.id', '=', 'prof_cat_subcat.profissional_id')
                 .where('prof_cat_subcat.categoria_id', Number(categoria))
