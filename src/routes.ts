@@ -16,7 +16,6 @@ routes.get('/subcategorias', subcategoriasController.index);
 routes.get('/profissionais', profissionaisController.index);
 routes.get('/profissionais/:id', profissionaisController.exibirPorId);
 
-
 routes.post('/profissionais',
     celebrate({
         body: Joi.object().keys({
