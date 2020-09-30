@@ -14,8 +14,9 @@ export default class ProfissionaisController {
                     error: 'Selecione uma cidade e categoria para continuar.',
                 });
             }
-            let profissionais = [];
 
+            let profissionais = [];
+            
             if(!subcategoria){
                 profissionais = await db('profissionais')
                 .join('prof_cat_subcat', 'profissionais.id', '=', 'prof_cat_subcat.profissional_id')
@@ -33,8 +34,8 @@ export default class ProfissionaisController {
                 .distinct()
                 .select('profissionais.*');
             }
-            
-            const serializedProfissionais = profissionais.map(profissional => {
+
+            const serializedProfissionais = profissionais.map(profissional => { 
                 return {
                     ...profissional
                 };
